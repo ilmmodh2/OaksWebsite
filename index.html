@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oaks Dry Cleaners — We Clean. You Shine.</title>
+  <meta name="description" content="Family-owned premium dry cleaning serving Beaumont, Nederland, and Orange for over 20 years.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --g-dark:    #0b1f14;
+      --g-pri:     #1a3d2b;
+      --g-mid:     #2d5a3e;
+      --g-light:   #3d7a56;
+      --gold:      #c9a84c;
+      --gold-hi:   #e8c96e;
+      --cream:     #f7f3ec;
+      --white:     #ffffff;
+      --charcoal:  #1c1c1c;
+      --gray:      #666;
+      --gray-lt:   #aaa;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+      --ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --tx:        all 0.4s var(--ease);
+      --r:         12px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--cream); color: var(--charcoal); line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--g-light), var(--gold));
+      z-index: 9999; transition: width 0.1s linear;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 22px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--tx);
+    }
+    .nav.scrolled {
+      padding: 14px 60px;
+      background: rgba(11,31,20,0.96);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 30px rgba(0,0,0,0.35);
+    }
+    .nav-logo { height: 50px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+    .nav-links { display: flex; gap: 38px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.13em; text-transform: uppercase; transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold) !important; color: var(--g-dark) !important;
+      padding: 10px 24px !important; border-radius: 4px; font-weight: 700 !important;
+    }
+    .nav-cta:hover { background: var(--gold-hi) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 26px; height: 2px; background: white; transition: var(--tx); }
+
+    /* ── HERO ── */
+    .hero-wrap { height: 400vh; position: relative; }
+    .hero-sticky {
+      position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden;
+      background: var(--g-dark);
+    }
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0; transition: opacity 1s ease;
+    }
+    .hero-video.loaded { opacity: 1; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(11,31,20,0.45) 0%, rgba(11,31,20,0.25) 45%, rgba(11,31,20,0.75) 100%);
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 20px; gap: 22px;
+    }
+    .hero-logo { height: 110px; object-fit: contain; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5)); opacity: 0; animation: fadeDown 1.2s var(--ease) 0.2s forwards; }
+    .hero-tag {
+      font-family: var(--serif); font-size: clamp(3.2rem, 8.5vw, 7.5rem);
+      font-weight: 400; color: white; line-height: 1.06; letter-spacing: -0.01em;
+      opacity: 0; animation: fadeUp 1.2s var(--ease) 0.4s forwards;
+    }
+    .hero-tag em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 0.85rem; color: rgba(255,255,255,0.72); font-weight: 400;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      opacity: 0; animation: fadeUp 1.2s var(--ease) 0.6s forwards;
+    }
+    .hero-btns {
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 1.2s var(--ease) 0.8s forwards;
+    }
+    .btn-gold {
+      background: var(--gold); color: var(--g-dark); padding: 14px 36px;
+      border-radius: 4px; font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.1em; text-transform: uppercase; border: 2px solid var(--gold);
+      transition: var(--tx); display: inline-block;
+    }
+    .btn-gold:hover { background: var(--gold-hi); border-color: var(--gold-hi); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,0.4); }
+    .btn-ghost {
+      background: transparent; color: white; padding: 14px 36px;
+      border-radius: 4px; font-weight: 500; font-size: 0.85rem;
+      letter-spacing: 0.1em; text-transform: uppercase; border: 2px solid rgba(255,255,255,0.45);
+      transition: var(--tx); display: inline-block;
+    }
+    .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.5); font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      opacity: 0; animation: fadeUp 1s var(--ease) 1.2s forwards;
+    }
+    .scroll-line { width: 1px; height: 46px; background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent); animation: pulse 2s ease infinite; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 120px 60px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .label { font-size: 0.73rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .title { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 600; line-height: 1.15; color: var(--g-dark); }
+    .title span { font-style: italic; color: var(--g-light); }
+    .bar { width: 54px; height: 2px; background: var(--gold); margin: 18px 0 28px; }
+
+    /* ── REVEAL ── */
+    .r  { opacity: 0; transform: translateY(40px);  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+    .rl { opacity: 0; transform: translateX(-50px); transition: opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+    .rr { opacity: 0; transform: translateX(50px);  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease); }
+    .r.on, .rl.on, .rr.on { opacity: 1; transform: none; }
+
+    /* ── ABOUT ── */
+    .about { background: var(--g-dark); color: white; position: relative; overflow: hidden; }
+    .about::after {
+      content: 'OAKS'; position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+      font-family: var(--serif); font-size: 20rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about .title { color: white; }
+    .about .title span { color: var(--gold); font-style: italic; }
+    .about-text { color: rgba(255,255,255,0.72); font-size: 1.02rem; line-height: 1.82; }
+    .about-text + .about-text { margin-top: 14px; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 36px; }
+    .stat {
+      background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--r); padding: 26px 22px; transition: var(--tx);
+    }
+    .stat:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.3); }
+    .stat-n { font-family: var(--serif); font-size: 2.6rem; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+    .stat-l { font-size: 0.82rem; color: rgba(255,255,255,0.55); }
+    .about-quote { font-family: var(--serif); font-size: clamp(1.7rem, 2.8vw, 2.4rem); font-style: italic; color: rgba(255,255,255,0.88); line-height: 1.42; border-left: 3px solid var(--gold); padding-left: 28px; }
+    .about-quote b { color: var(--gold); font-weight: 400; }
+    .mission-box {
+      margin-top: 30px; padding: 26px; background: rgba(201,168,76,0.07);
+      border-radius: var(--r); border: 1px solid rgba(201,168,76,0.18);
+    }
+    .mission-box .label { color: var(--gold-hi); }
+    .mission-box p { color: rgba(255,255,255,0.75); font-size: 0.93rem; line-height: 1.72; }
+
+    /* ── SERVICES ── */
+    .services { background: var(--cream); }
+    .services-head { text-align: center; margin-bottom: 64px; }
+    .services-head .bar { margin: 18px auto 0; }
+    .svc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 26px; }
+    .svc-card {
+      background: white; border-radius: var(--r); padding: 38px 30px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04);
+      position: relative; overflow: hidden; transition: var(--tx);
+    }
+    .svc-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--g-pri), var(--gold));
+      transform: scaleX(0); transition: transform 0.4s var(--ease);
+    }
+    .svc-card:hover { transform: translateY(-9px); box-shadow: 0 20px 56px rgba(0,0,0,0.14); }
+    .svc-card:hover::after { transform: scaleX(1); }
+    .svc-icon {
+      width: 62px; height: 62px; border-radius: 15px; margin-bottom: 22px;
+      background: linear-gradient(135deg, var(--g-pri), var(--g-mid));
+      display: flex; align-items: center; justify-content: center; transition: var(--tx);
+    }
+    .svc-card:hover .svc-icon { background: linear-gradient(135deg, var(--gold), var(--gold-hi)); }
+    .svc-icon i { font-size: 1.45rem; color: white; transition: color 0.3s; }
+    .svc-card:hover .svc-icon i { color: var(--g-dark); }
+    .svc-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--g-dark); margin-bottom: 10px; }
+    .svc-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.72; }
+
+    /* ── PROCESS ── */
+    .process { background: var(--g-pri); color: white; }
+    .process-head { text-align: center; margin-bottom: 64px; }
+    .process-head .title { color: white; }
+    .process-head .title span { color: var(--gold); }
+    .process-head .bar { margin: 18px auto 0; background: var(--gold); }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; position: relative; }
+    .steps::before {
+      content: ''; position: absolute; top: 47px;
+      left: calc(16.67% + 28px); right: calc(16.67% + 28px);
+      height: 1px; background: linear-gradient(90deg, var(--gold), rgba(201,168,76,0.2), var(--gold));
+    }
+    .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 28px; }
+    .step-num {
+      width: 94px; height: 94px; border-radius: 50%; border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--gold);
+      background: var(--g-pri); position: relative; z-index: 1; margin-bottom: 26px;
+      transition: var(--tx);
+    }
+    .step:hover .step-num { background: var(--gold); color: var(--g-dark); }
+    .step-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: white; margin-bottom: 12px; }
+    .step-desc { font-size: 0.88rem; color: rgba(255,255,255,0.68); line-height: 1.72; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--cream); }
+    .testi-head { text-align: center; margin-bottom: 56px; }
+    .testi-head .bar { margin: 18px auto 0; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+    .testi-card {
+      background: white; border-radius: var(--r); padding: 38px 34px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04);
+      position: relative; transition: var(--tx);
+    }
+    .testi-card:hover { box-shadow: 0 10px 36px rgba(0,0,0,0.11); transform: translateY(-4px); }
+    .testi-qmark { font-family: var(--serif); font-size: 5rem; line-height: 1; color: var(--gold); opacity: 0.22; position: absolute; top: 16px; left: 24px; }
+    .stars { display: flex; gap: 3px; margin-bottom: 14px; }
+    .stars i { color: var(--gold); font-size: 0.82rem; }
+    .testi-text { font-size: 0.95rem; color: var(--gray); line-height: 1.78; margin-bottom: 26px; position: relative; z-index: 1; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--g-pri), var(--g-light));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-family: var(--serif); font-size: 1rem; font-weight: 600;
+    }
+    .author-name { font-weight: 600; font-size: 0.92rem; color: var(--charcoal); }
+    .author-loc { font-size: 0.78rem; color: var(--gray-lt); }
+
+    /* ── LOCATIONS ── */
+    .locations { background: var(--g-dark); color: white; }
+    .loc-head { text-align: center; margin-bottom: 56px; }
+    .loc-head .title { color: white; }
+    .loc-head .bar { margin: 18px auto 0; background: var(--gold); }
+    .loc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+    .loc-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--r); padding: 38px 30px; transition: var(--tx);
+    }
+    .loc-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.38); transform: translateY(-4px); }
+    .loc-city { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; color: var(--gold); margin-bottom: 18px; }
+    .loc-row { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; }
+    .loc-row i { color: var(--gold); font-size: 0.82rem; margin-top: 3px; width: 15px; flex-shrink: 0; }
+    .loc-row span { font-size: 0.87rem; color: rgba(255,255,255,0.65); line-height: 1.55; }
+    .hrs-head { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 22px 0 10px; }
+    .hr-row { display: flex; justify-content: space-between; font-size: 0.84rem; color: rgba(255,255,255,0.6); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .hr-row:last-child { border-bottom: none; }
+    .hr-row b { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--cream); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .contact-desc { color: var(--gray); font-size: 1rem; line-height: 1.72; margin-bottom: 34px; }
+    .c-detail { display: flex; gap: 13px; align-items: center; margin-bottom: 16px; }
+    .c-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--g-pri); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .c-icon i { color: var(--gold); font-size: 0.92rem; }
+    .c-text { font-size: 0.88rem; color: var(--gray); }
+    .c-text strong { display: block; color: var(--charcoal); font-size: 0.92rem; margin-bottom: 1px; }
+    .cform { background: white; border-radius: 16px; padding: 46px; box-shadow: 0 8px 40px rgba(0,0,0,0.1); }
+    .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .fg.full { grid-column: 1/-1; }
+    .fg label { font-size: 0.76rem; font-weight: 600; color: var(--charcoal); letter-spacing: 0.06em; text-transform: uppercase; }
+    .fg input, .fg select, .fg textarea {
+      padding: 13px 15px; border: 1px solid rgba(0,0,0,0.11); border-radius: 8px;
+      font-family: var(--sans); font-size: 0.93rem; color: var(--charcoal);
+      background: var(--cream); outline: none; transition: border-color 0.25s, box-shadow 0.25s;
+      -webkit-appearance: none; appearance: none;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--g-pri); box-shadow: 0 0 0 3px rgba(26,61,43,0.1); }
+    .fg textarea { min-height: 120px; resize: vertical; }
+    .fsub {
+      width: 100%; padding: 15px; background: var(--g-pri); color: white; border: none;
+      border-radius: 8px; font-family: var(--sans); font-size: 0.88rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: var(--tx); margin-top: 6px;
+    }
+    .fsub:hover { background: var(--g-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,61,43,0.25); }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--g-dark); color: white; padding: 64px 60px 40px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 48px; }
+    .foot-logo { height: 50px; object-fit: contain; margin-bottom: 14px; }
+    .foot-about { font-size: 0.86rem; color: rgba(255,255,255,0.5); line-height: 1.72; }
+    .foot-col h4 { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .foot-col ul a { font-size: 0.86rem; color: rgba(255,255,255,0.5); transition: color 0.25s; }
+    .foot-col ul a:hover { color: var(--gold); }
+    .foot-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin-bottom: 26px; }
+    .foot-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeDown { from { opacity:0; transform: translateY(-22px); } to { opacity:1; transform: none; } }
+    @keyframes fadeUp   { from { opacity:0; transform: translateY(28px); }  to { opacity:1; transform: none; } }
+    @keyframes pulse    { 0%,100% { opacity:0.55; transform: scaleY(1);   }  50% { opacity:0.25; transform: scaleY(0.5); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .svc-grid { grid-template-columns: repeat(2,1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+    @media (max-width: 900px) {
+      section { padding: 80px 40px; }
+      .nav, .nav.scrolled { padding: 16px 40px; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .loc-grid, .testi-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 48px; }
+      .steps::before { display: none; }
+      .step { padding: 0; }
+      .about-stats { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 640px) {
+      section { padding: 64px 22px; }
+      .nav, .nav.scrolled { padding: 15px 22px; }
+      .nav-links {
+        display: none; position: fixed; inset: 0; background: rgba(11,31,20,0.97);
+        flex-direction: column; align-items: center; justify-content: center; gap: 28px; z-index: 5;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1.15rem; }
+      .hamburger { display: flex; z-index: 10; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .fgrid { grid-template-columns: 1fr; }
+      .footer { padding: 48px 22px 32px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .foot-bottom { flex-direction: column; gap: 10px; text-align: center; }
+      .hero-logo { height: 72px; }
+      .hero-tag { font-size: clamp(2.6rem, 11vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <img src="Oaks Logo.png.avif" alt="Oaks Dry Cleaners" class="nav-logo">
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#locations">Locations</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="hamburger" id="ham" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap" id="heroWrap">
+  <div class="hero-sticky">
+    <video class="hero-video" id="heroVid" muted playsinline preload="auto">
+      <source src="Oaks Video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img src="Oaks Logo.png.avif" alt="Oaks Dry Cleaners" class="hero-logo">
+      <h1 class="hero-tag">We Clean.<br><em>You Shine.</em></h1>
+      <p class="hero-sub">Premium Dry Cleaning &nbsp;·&nbsp; Golden Triangle, Texas</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-gold">Our Services</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="rl">
+        <p class="label">Our Story</p>
+        <h2 class="title">Family-owned.<br><span>Community trusted.</span></h2>
+        <div class="bar"></div>
+        <p class="about-text">Oaks Dry Cleaners is a family-owned and operated local business that has served the Golden Triangle for over 20 years. Since opening our doors, we've been committed to providing service of the highest quality — paying particular attention to working efficiently while meeting and exceeding expectations.</p>
+        <p class="about-text">We've worked hard to create a name for ourselves and earn the trust of this community. Our mission is simple: high-quality services, delivered in a timely manner, every single time.</p>
+        <div class="about-stats">
+          <div class="stat"><div class="stat-n" data-target="20">0</div><div class="stat-l">Years in Business</div></div>
+          <div class="stat"><div class="stat-n" data-target="3">0</div><div class="stat-l">Locations</div></div>
+          <div class="stat"><div class="stat-n" data-target="1000">0</div><div class="stat-l">Happy Customers</div></div>
+          <div class="stat"><div class="stat-n" data-target="100">0</div><div class="stat-l">% Satisfaction Goal</div></div>
+        </div>
+      </div>
+      <div class="rr">
+        <blockquote class="about-quote">"Come see why we are rated one of the <b>best dry cleaners</b> in the Golden Triangle area."</blockquote>
+        <div class="mission-box">
+          <p class="label">Our Mission</p>
+          <p>To provide high-quality dry cleaning and garment care services in a timely manner. Our team caters to your specific needs to ensure excellence — every single time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-head r">
+      <p class="label">What We Offer</p>
+      <h2 class="title">Our <span>Services</span></h2>
+      <div class="bar"></div>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card r" style="transition-delay:.08s">
+        <div class="svc-icon"><i class="fas fa-tshirt"></i></div>
+        <h3 class="svc-title">Dry Cleaning</h3>
+        <p class="svc-desc">Our three-stage process delivers exceptional results: precision spot treatment, water-free solvent washing, expert pressing, and a thorough final inspection.</p>
+      </div>
+      <div class="svc-card r" style="transition-delay:.18s">
+        <div class="svc-icon"><i class="fas fa-star"></i></div>
+        <h3 class="svc-title">Starching</h3>
+        <p class="svc-desc">Light, medium, or heavy — we're famous for our Cowboy starch. Your shirts and pants come back crisp, sharp, and exactly how you like them.</p>
+      </div>
+      <div class="svc-card r" style="transition-delay:.28s">
+        <div class="svc-icon"><i class="fas fa-bed"></i></div>
+        <h3 class="svc-title">Household</h3>
+        <p class="svc-desc">Freshen your blankets, comforters, pillow cases, and sheets. Once you crawl into professionally cleaned bedding, you'll wonder why you waited.</p>
+      </div>
+      <div class="svc-card r" style="transition-delay:.38s">
+        <div class="svc-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3 class="svc-title">Leather Cleaning</h3>
+        <p class="svc-desc">Leather demands expert care. Our trained professionals use specialized techniques to clean, condition, and restore leather so it always looks its best.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="process-head r">
+      <p class="label">How It Works</p>
+      <h2 class="title">Our <span>3-Stage</span> Process</h2>
+      <div class="bar"></div>
+    </div>
+    <div class="steps">
+      <div class="step r" style="transition-delay:.08s">
+        <div class="step-num">1</div>
+        <h3 class="step-title">Spotting</h3>
+        <p class="step-desc">Before anything touches water or solvent, our team performs a meticulous check — targeting every spot and stain so nothing gets missed.</p>
+      </div>
+      <div class="step r" style="transition-delay:.22s">
+        <div class="step-num">2</div>
+        <h3 class="step-title">Wash & Press</h3>
+        <p class="step-desc">Clothes are carefully washed with a water-free liquid solvent for a deep, safe clean — then expertly pressed for a crisp, professional finish.</p>
+      </div>
+      <div class="step r" style="transition-delay:.36s">
+        <div class="step-num">3</div>
+        <h3 class="step-title">Inspection</h3>
+        <p class="step-desc">Every garment is examined by our trained staff before it leaves our hands, ensuring it meets our exacting Oaks Dry Cleaners quality standards.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="testi-head r">
+      <p class="label">What People Say</p>
+      <h2 class="title">Customer <span>Testimonials</span></h2>
+      <div class="bar"></div>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card r" style="transition-delay:.08s">
+        <div class="testi-qmark">"</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">Employees are always extremely nice, very knowledgeable and helpful. The best cleaners in the area.</p>
+        <div class="testi-author"><div class="avatar">RS</div><div><div class="author-name">Robert Shivers</div><div class="author-loc">Golden Triangle</div></div></div>
+      </div>
+      <div class="testi-card r" style="transition-delay:.18s">
+        <div class="testi-qmark">"</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">Quality of work is top notch. They offer the best starching in town for an amazing price.</p>
+        <div class="testi-author"><div class="avatar">MB</div><div><div class="author-name">Mike Brown</div><div class="author-loc">Golden Triangle</div></div></div>
+      </div>
+      <div class="testi-card r" style="transition-delay:.28s">
+        <div class="testi-qmark">"</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-text">My go-to cleaners! Love the employees — very friendly and understanding. Prices are very reasonable. I recommend all my friends and family to come here.</p>
+        <div class="testi-author"><div class="avatar">LD</div><div><div class="author-name">Lisa Driver</div><div class="author-loc">Golden Triangle</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section class="locations" id="locations">
+  <div class="container">
+    <div class="loc-head r">
+      <p class="label">Find Us</p>
+      <h2 class="title" style="color:white">Our <span style="color:var(--gold);font-style:italic">Locations</span></h2>
+      <div class="bar"></div>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card r" style="transition-delay:.08s">
+        <h3 class="loc-city">Beaumont</h3>
+        <div class="loc-row"><i class="fas fa-map-marker-alt"></i><span>Beaumont, Texas<br>Golden Triangle Area</span></div>
+        <div class="loc-row"><i class="fas fa-envelope"></i><span>oaksdrycleaners@gmail.com</span></div>
+        <p class="hrs-head">Hours</p>
+        <div class="hr-row"><b>Mon &amp; Tue</b><span>6:30 AM – 7:00 PM</span></div>
+        <div class="hr-row"><b>Wednesday</b><span>8:30 AM – 7:00 PM</span></div>
+        <div class="hr-row"><b>Thu &amp; Fri</b><span>6:30 AM – 7:00 PM</span></div>
+        <div class="hr-row"><b>Saturday</b><span>9:00 AM – 3:00 PM</span></div>
+        <div class="hr-row"><b>Sunday</b><span>Closed</span></div>
+      </div>
+      <div class="loc-card r" style="transition-delay:.18s">
+        <h3 class="loc-city">Nederland</h3>
+        <div class="loc-row"><i class="fas fa-map-marker-alt"></i><span>Nederland, Texas<br>Golden Triangle Area</span></div>
+        <div class="loc-row"><i class="fas fa-envelope"></i><span>oaksdrycleaners@gmail.com</span></div>
+        <p class="hrs-head">Hours</p>
+        <div class="hr-row"><b>Mon – Fri</b><span>8:00 AM – 6:30 PM</span></div>
+        <div class="hr-row"><b>Saturday</b><span>Closed</span></div>
+        <div class="hr-row"><b>Sunday</b><span>Closed</span></div>
+      </div>
+      <div class="loc-card r" style="transition-delay:.28s">
+        <h3 class="loc-city">Orange</h3>
+        <div class="loc-row"><i class="fas fa-map-marker-alt"></i><span>Orange, Texas<br>Golden Triangle Area</span></div>
+        <div class="loc-row"><i class="fas fa-envelope"></i><span>oaksdrycleaners@gmail.com</span></div>
+        <p class="hrs-head">Hours</p>
+        <div class="hr-row"><b>Mon – Fri</b><span>8:00 AM – 6:30 PM</span></div>
+        <div class="hr-row"><b>Saturday</b><span>Closed</span></div>
+        <div class="hr-row"><b>Sunday</b><span>Closed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="rl">
+        <p class="label">Reach Out</p>
+        <h2 class="title">Get in <span>Touch</span></h2>
+        <div class="bar"></div>
+        <p class="contact-desc">Have a question about our services, pricing, or drop-off times? We'd love to hear from you. Fill out the form or reach out directly — we'll get back to you promptly.</p>
+        <div class="c-detail"><div class="c-icon"><i class="fas fa-envelope"></i></div><div class="c-text"><strong>Email</strong>oaksdrycleaners@gmail.com</div></div>
+        <div class="c-detail"><div class="c-icon"><i class="fas fa-map-marker-alt"></i></div><div class="c-text"><strong>Locations</strong>Beaumont · Nederland · Orange, TX</div></div>
+        <div class="c-detail"><div class="c-icon"><i class="fas fa-clock"></i></div><div class="c-text"><strong>Open Hours</strong>Mon–Fri from 6:30 AM (Beaumont)<br>Mon–Fri from 8:00 AM (Nederland &amp; Orange)</div></div>
+      </div>
+      <div class="rr">
+        <form class="cform" id="cform" onsubmit="submitForm(event)">
+          <div class="fgrid">
+            <div class="fg"><label>Name</label><input type="text" placeholder="Your name" required></div>
+            <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com" required></div>
+            <div class="fg full">
+              <label>Topic</label>
+              <select>
+                <option value="">Select a topic…</option>
+                <option>Dry Cleaning</option>
+                <option>Starching</option>
+                <option>Household Items</option>
+                <option>Leather Cleaning</option>
+                <option>Pricing &amp; Hours</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg full"><label>Message</label><textarea placeholder="How can we help?" required></textarea></div>
+          </div>
+          <button type="submit" class="fsub" id="fsub">Send Message &nbsp;<i class="fas fa-arrow-right"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="Oaks Logo.png.avif" alt="Oaks Dry Cleaners" class="foot-logo">
+        <p class="foot-about">Family-owned dry cleaning services proudly serving the Golden Triangle for over 20 years. We Clean. You Shine.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#locations">Locations</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Dry Cleaning</a></li>
+          <li><a href="#services">Starching</a></li>
+          <li><a href="#services">Household Items</a></li>
+          <li><a href="#services">Leather Cleaning</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:oaksdrycleaners@gmail.com">oaksdrycleaners@gmail.com</a></li>
+          <li><a href="#locations">Beaumont, TX</a></li>
+          <li><a href="#locations">Nederland, TX</a></li>
+          <li><a href="#locations">Orange, TX</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="foot-divider">
+    <div class="foot-bottom">
+      <span>&copy; <span id="yr"></span> Oaks Dry Cleaners. All rights reserved.</span>
+      <span>Beaumont &nbsp;·&nbsp; Nederland &nbsp;·&nbsp; Orange, Texas</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Progress bar
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  // Mobile nav
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  }));
+
+  // Scroll-controlled video
+  const heroWrap = document.getElementById('heroWrap');
+  const vid = document.getElementById('heroVid');
+
+  vid.addEventListener('loadedmetadata', () => {
+    vid.classList.add('loaded');
+    window.addEventListener('scroll', () => {
+      const total = heroWrap.offsetHeight - window.innerHeight;
+      const progress = Math.max(0, Math.min(window.scrollY / total, 1));
+      if (vid.duration) vid.currentTime = progress * vid.duration;
+    }, { passive: true });
+  });
+
+  // Fallback if metadata already loaded
+  if (vid.readyState >= 1) {
+    vid.classList.add('loaded');
+    window.addEventListener('scroll', () => {
+      const total = heroWrap.offsetHeight - window.innerHeight;
+      const progress = Math.max(0, Math.min(window.scrollY / total, 1));
+      if (vid.duration) vid.currentTime = progress * vid.duration;
+    }, { passive: true });
+  }
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.r, .rl, .rr').forEach(el => observer.observe(el));
+
+  // Count-up stats
+  const countObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = +el.dataset.target;
+      const suffix = target === 100 ? '%' : target >= 1000 ? '+' : target > 3 ? '+' : '';
+      let val = 0;
+      const step = target / (1800 / 16);
+      const timer = setInterval(() => {
+        val = Math.min(val + step, target);
+        el.textContent = Math.floor(val).toLocaleString() + suffix;
+        if (val >= target) clearInterval(timer);
+      }, 16);
+      countObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-n[data-target]').forEach(el => countObserver.observe(el));
+
+  // Contact form
+  function submitForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('fsub');
+    btn.textContent = 'Sending…';
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      btn.innerHTML = '&#10003; Message Sent!';
+      btn.style.background = 'var(--g-mid)';
+      btn.style.opacity = '1';
+      e.target.reset();
+      setTimeout(() => {
+        btn.innerHTML = 'Send Message &nbsp;<i class="fas fa-arrow-right"></i>';
+        btn.style.background = '';
+      }, 4000);
+    }, 1100);
+  }
+</script>
+</body>
+</html>
