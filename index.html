@@ -334,6 +334,10 @@
       .step { padding: 0; }
       .about-stats { grid-template-columns: repeat(2,1fr); }
     }
+    @media (max-width: 768px) {
+      /* On mobile: no scroll-jacking, just a normal full-screen video hero */
+      .hero-wrap { height: 100vh; }
+    }
     @media (max-width: 640px) {
       section { padding: 64px 22px; }
       .nav, .nav.scrolled { padding: 15px 22px; }
@@ -667,17 +671,32 @@
     document.getElementById('navLinks').classList.remove('open');
   }));
 
-  // ── HERO: scroll-controlled video ──
+  // ── HERO: scroll-controlled video (desktop) / autoplay (mobile) ──
   const heroWrap = document.getElementById('heroWrap');
   const vid      = document.getElementById('heroVid');
+  const isMobile = ('ontouchstart' in window) || window.innerWidth < 768;
+
+  // Kick off loading immediately (mobile browsers often skip preload="auto")
+  vid.load();
+
+  // Fallback: show video after 800ms even if events don't fire
+  setTimeout(() => vid.classList.add('loaded'), 800);
 
   function initHero() {
     vid.classList.add('loaded');
-    window.addEventListener('scroll', () => {
-      const total = heroWrap.offsetHeight - window.innerHeight;
-      const raw   = Math.max(0, Math.min(window.scrollY / total, 1));
-      if (vid.duration) vid.currentTime = raw * vid.duration;
-    }, { passive: true });
+
+    if (isMobile) {
+      // Autoplay looped on mobile — scroll scrubbing doesn't work on touch
+      vid.setAttribute('autoplay', '');
+      vid.setAttribute('loop', '');
+      vid.play().catch(() => {});
+    } else {
+      window.addEventListener('scroll', () => {
+        const total = heroWrap.offsetHeight - window.innerHeight;
+        const raw   = Math.max(0, Math.min(window.scrollY / total, 1));
+        if (vid.duration) vid.currentTime = raw * vid.duration;
+      }, { passive: true });
+    }
   }
 
   vid.addEventListener('loadedmetadata', initHero);
