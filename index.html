@@ -95,7 +95,7 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 20px; gap: 22px;
     }
-    .hero-logo { height: 110px; object-fit: contain; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5)); opacity: 0; animation: fadeDown 1.2s var(--ease) 0.2s forwards; will-change: transform, opacity; transform-origin: center center; }
+    .hero-logo { height: 110px; object-fit: contain; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5)); opacity: 0; animation: fadeDown 1.2s var(--ease) 0.2s forwards; }
     .hero-tag {
       font-family: var(--serif); font-size: clamp(3.2rem, 8.5vw, 7.5rem);
       font-weight: 400; color: white; line-height: 1.06; letter-spacing: -0.01em;
@@ -667,75 +667,17 @@
     document.getElementById('navLinks').classList.remove('open');
   }));
 
-  // ── HERO: scroll video + logo fly-to-nav ──
+  // ── HERO: scroll-controlled video ──
   const heroWrap = document.getElementById('heroWrap');
   const vid      = document.getElementById('heroVid');
-  const heroLogo = document.querySelector('.hero-logo');
-  const navLogoEl = document.querySelector('.nav-logo');
-
-  // Hide nav logo until hero section is scrolled past
-  navLogoEl.style.opacity = '0';
-  navLogoEl.style.transition = 'opacity 0.35s ease';
-
-  let logoStart = null; // cached initial position
-
-  function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
-
-  function updateHero() {
-    const total = heroWrap.offsetHeight - window.innerHeight;
-    const raw   = Math.max(0, Math.min(window.scrollY / total, 1));
-
-    // Video scrub
-    if (vid.duration) vid.currentTime = raw * vid.duration;
-
-    if (raw <= 0.001) {
-      // Back at top — restore logo to flex layout
-      heroLogo.style.cssText = 'opacity:1; animation:none;';
-      navLogoEl.style.opacity = '0';
-      logoStart = null;
-      return;
-    }
-
-    // Cache starting position once (after entry animation settles)
-    if (!logoStart) {
-      const r = heroLogo.getBoundingClientRect();
-      logoStart = { x: r.left + r.width/2, y: r.top + r.height/2, h: r.height };
-    }
-
-    const p = ease(raw);
-
-    // Target: nav logo center
-    const nr    = navLogoEl.getBoundingClientRect();
-    const endX  = nr.left + nr.width / 2;
-    const endY  = nr.top  + nr.height / 2;
-    const endSc = nr.height / logoStart.h;
-
-    const x  = logoStart.x + (endX  - logoStart.x) * p;
-    const y  = logoStart.y + (endY  - logoStart.y) * p;
-    const sc = 1 + (endSc - 1) * p;
-
-    // Cross-fade: hero logo out, nav logo in (last 10% of scroll — logo is fully in place by then)
-    const heroOpacity = raw < 0.90 ? 1 : 1 - (raw - 0.90) / 0.10;
-    const navOpacity  = raw < 0.90 ? 0 :     (raw - 0.90) / 0.10;
-
-    heroLogo.style.cssText = `
-      animation: none;
-      position: fixed;
-      left: ${x}px;
-      top: ${y}px;
-      transform: translate(-50%,-50%) scale(${sc});
-      opacity: ${heroOpacity};
-      z-index: 1002;
-      pointer-events: none;
-      margin: 0;
-      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.4));
-    `;
-    navLogoEl.style.opacity = navOpacity;
-  }
 
   function initHero() {
     vid.classList.add('loaded');
-    window.addEventListener('scroll', updateHero, { passive: true });
+    window.addEventListener('scroll', () => {
+      const total = heroWrap.offsetHeight - window.innerHeight;
+      const raw   = Math.max(0, Math.min(window.scrollY / total, 1));
+      if (vid.duration) vid.currentTime = raw * vid.duration;
+    }, { passive: true });
   }
 
   vid.addEventListener('loadedmetadata', initHero);
