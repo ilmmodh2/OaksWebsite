@@ -51,17 +51,22 @@
     }
     .nav.scrolled {
       padding: 14px 60px;
-      background: rgba(11,31,20,0.96);
+      background: rgba(255,255,255,0.97);
       backdrop-filter: blur(14px);
-      box-shadow: 0 2px 30px rgba(0,0,0,0.35);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     }
-    .nav-logo { height: 50px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+    .nav-logo { height: 50px; object-fit: contain; transition: filter 0.4s ease; }
     .nav-links { display: flex; gap: 38px; list-style: none; }
     .nav-links a {
-      color: rgba(255,255,255,0.82); font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 500;
       letter-spacing: 0.13em; text-transform: uppercase; transition: color 0.25s;
     }
     .nav-links a:hover { color: var(--gold); }
+    /* Scrolled state — white nav, dark text */
+    .nav.scrolled .nav-links a { color: var(--g-dark); }
+    .nav.scrolled .nav-links a:hover { color: var(--g-light); }
+    .nav.scrolled .nav-cta { color: var(--g-dark) !important; }
+    .nav.scrolled .hamburger span { background: var(--g-dark); }
     .nav-cta {
       background: var(--gold) !important; color: var(--g-dark) !important;
       padding: 10px 24px !important; border-radius: 4px; font-weight: 700 !important;
@@ -143,33 +148,33 @@
     .r.on, .rl.on, .rr.on { opacity: 1; transform: none; }
 
     /* ── ABOUT ── */
-    .about { background: var(--g-dark); color: white; position: relative; overflow: hidden; }
+    .about { background: var(--white); color: var(--charcoal); position: relative; overflow: hidden; }
     .about::after {
       content: 'OAKS'; position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
-      font-family: var(--serif); font-size: 20rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      font-family: var(--serif); font-size: 20rem; font-weight: 700; color: rgba(26,61,43,0.03);
       line-height: 1; pointer-events: none; user-select: none;
     }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .about .title { color: white; }
-    .about .title span { color: var(--gold); font-style: italic; }
-    .about-text { color: rgba(255,255,255,0.72); font-size: 1.02rem; line-height: 1.82; }
+    .about .title { color: var(--g-dark); }
+    .about .title span { color: var(--g-light); font-style: italic; }
+    .about-text { color: var(--gray); font-size: 1.02rem; line-height: 1.82; }
     .about-text + .about-text { margin-top: 14px; }
     .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 36px; }
     .stat {
-      background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      background: var(--cream); border: 1px solid rgba(26,61,43,0.1);
       border-radius: var(--r); padding: 26px 22px; transition: var(--tx);
     }
-    .stat:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.3); }
-    .stat-n { font-family: var(--serif); font-size: 2.6rem; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 4px; }
-    .stat-l { font-size: 0.82rem; color: rgba(255,255,255,0.55); }
-    .about-quote { font-family: var(--serif); font-size: clamp(1.7rem, 2.8vw, 2.4rem); font-style: italic; color: rgba(255,255,255,0.88); line-height: 1.42; border-left: 3px solid var(--gold); padding-left: 28px; }
-    .about-quote b { color: var(--gold); font-weight: 400; }
+    .stat:hover { background: #edf4f0; border-color: rgba(26,61,43,0.25); }
+    .stat-n { font-family: var(--serif); font-size: 2.6rem; font-weight: 700; color: var(--g-pri); line-height: 1; margin-bottom: 4px; }
+    .stat-l { font-size: 0.82rem; color: var(--gray); }
+    .about-quote { font-family: var(--serif); font-size: clamp(1.7rem, 2.8vw, 2.4rem); font-style: italic; color: var(--g-dark); line-height: 1.42; border-left: 3px solid var(--gold); padding-left: 28px; }
+    .about-quote b { color: var(--g-pri); font-weight: 400; }
     .mission-box {
-      margin-top: 30px; padding: 26px; background: rgba(201,168,76,0.07);
-      border-radius: var(--r); border: 1px solid rgba(201,168,76,0.18);
+      margin-top: 30px; padding: 26px; background: #f0f6f2;
+      border-radius: var(--r); border: 1px solid rgba(26,61,43,0.12);
     }
-    .mission-box .label { color: var(--gold-hi); }
-    .mission-box p { color: rgba(255,255,255,0.75); font-size: 0.93rem; line-height: 1.72; }
+    .mission-box .label { color: var(--g-pri); }
+    .mission-box p { color: var(--gray); font-size: 0.93rem; line-height: 1.72; }
 
     /* ── SERVICES ── */
     .services { background: var(--cream); }
@@ -200,28 +205,28 @@
     .svc-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.72; }
 
     /* ── PROCESS ── */
-    .process { background: var(--g-pri); color: white; }
+    .process { background: #f0f6f2; }
     .process-head { text-align: center; margin-bottom: 64px; }
-    .process-head .title { color: white; }
-    .process-head .title span { color: var(--gold); }
+    .process-head .title { color: var(--g-dark); }
+    .process-head .title span { color: var(--g-light); }
     .process-head .bar { margin: 18px auto 0; background: var(--gold); }
     .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; position: relative; }
     .steps::before {
       content: ''; position: absolute; top: 47px;
       left: calc(16.67% + 28px); right: calc(16.67% + 28px);
-      height: 1px; background: linear-gradient(90deg, var(--gold), rgba(201,168,76,0.2), var(--gold));
+      height: 1px; background: linear-gradient(90deg, var(--g-pri), rgba(26,61,43,0.2), var(--g-pri));
     }
     .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 28px; }
     .step-num {
-      width: 94px; height: 94px; border-radius: 50%; border: 2px solid var(--gold);
+      width: 94px; height: 94px; border-radius: 50%; border: 2px solid var(--g-pri);
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--gold);
-      background: var(--g-pri); position: relative; z-index: 1; margin-bottom: 26px;
+      font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--g-pri);
+      background: white; position: relative; z-index: 1; margin-bottom: 26px;
       transition: var(--tx);
     }
-    .step:hover .step-num { background: var(--gold); color: var(--g-dark); }
-    .step-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: white; margin-bottom: 12px; }
-    .step-desc { font-size: 0.88rem; color: rgba(255,255,255,0.68); line-height: 1.72; }
+    .step:hover .step-num { background: var(--g-pri); color: white; }
+    .step-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: var(--g-dark); margin-bottom: 12px; }
+    .step-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.72; }
 
     /* ── TESTIMONIALS ── */
     .testimonials { background: var(--cream); }
@@ -249,24 +254,24 @@
     .author-loc { font-size: 0.78rem; color: var(--gray-lt); }
 
     /* ── LOCATIONS ── */
-    .locations { background: var(--g-dark); color: white; }
+    .locations { background: var(--white); }
     .loc-head { text-align: center; margin-bottom: 56px; }
-    .loc-head .title { color: white; }
+    .loc-head .title { color: var(--g-dark); }
     .loc-head .bar { margin: 18px auto 0; background: var(--gold); }
     .loc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
     .loc-card {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      background: var(--cream); border: 1px solid rgba(26,61,43,0.1);
       border-radius: var(--r); padding: 38px 30px; transition: var(--tx);
     }
-    .loc-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.38); transform: translateY(-4px); }
-    .loc-city { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; color: var(--gold); margin-bottom: 18px; }
+    .loc-card:hover { background: #edf4f0; border-color: var(--g-pri); transform: translateY(-4px); box-shadow: 0 8px 28px rgba(26,61,43,0.1); }
+    .loc-city { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; color: var(--g-pri); margin-bottom: 18px; }
     .loc-row { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; }
     .loc-row i { color: var(--gold); font-size: 0.82rem; margin-top: 3px; width: 15px; flex-shrink: 0; }
-    .loc-row span { font-size: 0.87rem; color: rgba(255,255,255,0.65); line-height: 1.55; }
-    .hrs-head { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 22px 0 10px; }
-    .hr-row { display: flex; justify-content: space-between; font-size: 0.84rem; color: rgba(255,255,255,0.6); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .loc-row span { font-size: 0.87rem; color: var(--gray); line-height: 1.55; }
+    .hrs-head { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g-pri); margin: 22px 0 10px; }
+    .hr-row { display: flex; justify-content: space-between; font-size: 0.84rem; color: var(--gray); padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
     .hr-row:last-child { border-bottom: none; }
-    .hr-row b { color: rgba(255,255,255,0.8); font-weight: 500; }
+    .hr-row b { color: var(--g-dark); font-weight: 500; }
 
     /* ── CONTACT ── */
     .contact { background: var(--cream); }
@@ -516,7 +521,7 @@
   <div class="container">
     <div class="loc-head r">
       <p class="label">Find Us</p>
-      <h2 class="title" style="color:white">Our <span style="color:var(--gold);font-style:italic">Locations</span></h2>
+      <h2 class="title">Our <span>Locations</span></h2>
       <div class="bar"></div>
     </div>
     <div class="loc-grid">
@@ -709,9 +714,9 @@
     const y  = logoStart.y + (endY  - logoStart.y) * p;
     const sc = 1 + (endSc - 1) * p;
 
-    // Cross-fade: hero logo out, nav logo in (last 20% of scroll)
-    const heroOpacity = raw < 0.80 ? 1 : 1 - (raw - 0.80) / 0.20;
-    const navOpacity  = raw < 0.80 ? 0 :     (raw - 0.80) / 0.20;
+    // Cross-fade: hero logo out, nav logo in (last 10% of scroll — logo is fully in place by then)
+    const heroOpacity = raw < 0.90 ? 1 : 1 - (raw - 0.90) / 0.10;
+    const navOpacity  = raw < 0.90 ? 0 :     (raw - 0.90) / 0.10;
 
     heroLogo.style.cssText = `
       animation: none;
@@ -720,9 +725,10 @@
       top: ${y}px;
       transform: translate(-50%,-50%) scale(${sc});
       opacity: ${heroOpacity};
-      z-index: 999;
+      z-index: 1002;
+      pointer-events: none;
       margin: 0;
-      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.4));
     `;
     navLogoEl.style.opacity = navOpacity;
   }
